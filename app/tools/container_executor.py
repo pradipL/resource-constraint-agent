@@ -124,6 +124,14 @@ class ContainerCodeExecutor(BaseCodeExecutor):
 
         try:
             client = self._client()
+            try:
+                client.images.get(image)
+            except Exception:
+                return (
+                    f"Execution error: Docker image '{image}' not found locally. "
+                    "Run 'make setup' (or 'docker build -f Dockerfile.sandbox -t resource-agent-sandbox:latest .') "
+                    "to build it before starting the agent."
+                )
             container = client.containers.run(
                 image=image,
                 command=cmd_prefix + [code],

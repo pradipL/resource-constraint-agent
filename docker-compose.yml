@@ -1,5 +1,13 @@
 services:
 
+  # ── Sandbox image (built once, used at runtime by the agent) ─────────────
+  sandbox:
+    build:
+      context: .
+      dockerfile: Dockerfile.sandbox
+    image: resource-agent-sandbox:latest
+    command: ["true"]
+
   # ── Qdrant vector database ────────────────────────────────────────────────
   qdrant:
     image: qdrant/qdrant:latest
@@ -33,6 +41,8 @@ services:
       - tmp_data:/app/tmp
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
+      sandbox:
+        condition: service_completed_successfully
       qdrant:
         condition: service_healthy
 
