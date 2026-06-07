@@ -1,6 +1,5 @@
 # Environment
 .env
-.env.*
 
 # Virtual environments
 venv/
@@ -37,6 +36,7 @@ htmlcov/
 
 # Claude
 CLAUDE.md
+.claude/
 
 # Project runtime artifacts
 traces/
