@@ -1,10 +1,38 @@
-1. I considered using a prebuilt ReAct agent package but chose to build a custom ReAct agent using LangGraph because of strict constraints on the system. Since the design limits the workflow to no more than 10 LLM calls and a maximum cost of $0.20, a custom implementation provides finer control over each reasoning step. This makes it easier to enforce call limits and prevent uncontrolled or excessive LLM usage that could lead to cost leakage or inefficient execution.
+# Design Decisions
 
-2. I considered using Daytona for the sandbox environment but chose Docker instead. The main requirement of the system is to execute untrusted code that can generate artifacts such as PDFs and other files, which then need to be persisted and made available to the user via downloadable links.
+---
 
-In my design, these generated files are stored in S3 and served through pre-signed URLs, which avoids coupling the sandbox filesystem with the host system. Alternatively, files could be persisted on the host after execution and then transferred, but that introduces additional complexity and does not significantly differ from a containerized workflow in terms of isolation boundaries.
+## 1. Custom ReAct Agent over Prebuilt Package
 
-I am aware that sandboxed code execution should not run directly on the host system due to security risks, including the possibility of malicious code causing system compromise or data corruption. While Daytona provides a more managed sandbox abstraction, for this assignment I opted for Docker running as a subprocess to achieve process isolation and controlled execution in a lightweight manner, while still meeting the functional and security requirements.
+**Decision:** Build a custom ReAct agent using LangGraph instead of a prebuilt ReAct agent package.
 
-3. I considered using a pure ReAct loop, but ultimately chose a hybrid approach that combines Planning, ReAct, and Reflection. In this design, the system first formulates a structured plan before taking any action. It then executes the plan step by step using a ReAct-style loop. If any part of the plan proves incorrect or suboptimal during execution, the system reflects on the outcome, revises the plan accordingly, and re-executes the necessary steps. This approach ensures more reliable execution, better adaptability, and improved handling of unexpected scenarios.
+**Reasoning:** The system enforces strict constraints — no more than 10 LLM calls per task and a maximum cost of $0.20. A custom implementation provides finer control over each reasoning step, making it straightforward to enforce call limits and prevent uncontrolled LLM usage that could cause cost leakage or inefficient execution. A prebuilt package does not expose the hooks needed to intercept and gate each call at this level of granularity.
+
+---
+
+## 2. Docker Sandbox over Daytona
+
+**Decision:** Use Docker containers as the sandbox environment instead of Daytona.
+
+**Reasoning:** The core requirement is to execute untrusted code that can generate artifacts such as PDFs and other files, which then need to be persisted and made available to the user.
+
+In the current design, generated files are stored locally and served as downloadable links after extraction from the container. Alternatively, files could be pushed to S3 and served via pre-signed URLs, avoiding any coupling between the sandbox filesystem and the host.
+
+Running untrusted code directly on the host is a security risk — malicious code could cause system compromise or data corruption. While Daytona provides a more managed sandbox abstraction, Docker was chosen for this assignment because it achieves process isolation and controlled execution in a lightweight manner, while still satisfying the functional and security requirements.
+
+---
+
+## 3. Hybrid Planning + ReAct + Reflection over Pure ReAct
+
+**Decision:** Use a hybrid approach combining Planning, ReAct, and Reflection instead of a pure ReAct loop.
+
+**Reasoning:** A pure ReAct loop reacts to observations one step at a time without an upfront plan, which makes it prone to drifting off course or repeating failed strategies. The hybrid approach works as follows:
+
+1. **Plan** — the system formulates a structured numbered plan before taking any action.
+2. **Execute** — the plan is executed step by step using a ReAct-style loop (Thought → Action → Observation).
+3. **Reflect** — after each tool call, the agent evaluates whether meaningful progress was made.
+4. **Replan** — if a step fails or stalls, the agent revises the plan and retries with a different approach.
+
+This ensures more reliable execution, better adaptability to unexpected failures, and prevents the agent from getting stuck in an unproductive loop.
+
 ![Planning, ReAct, and Reflection architecture](materials/architecture/langgraph_architecture.png)

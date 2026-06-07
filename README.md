@@ -157,6 +157,8 @@ GET /download?path=/app/traces/trace_20250607_120000.json
 
 Only paths inside `/app/tmp` and `/app/traces` are allowed.
 
+Note: If you want to see the full log of executing the agent you can see on the agent container log.
+
 
 ---
 

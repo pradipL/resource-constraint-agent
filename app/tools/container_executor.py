@@ -226,6 +226,7 @@ def sandbox_code_execution(
 
     To generate a file (PDF, Excel, CSV, etc.):
     - Write the file to EXACTLY '/tmp/sandbox_output' (no extension) inside the container.
+    - This tool will automatically download the file and return the local path in the response.
     - The file will be downloaded automatically and the local path returned.
     - Available libraries: reportlab, fpdf2, openpyxl, xlsxwriter, pandas, matplotlib, pillow, python-docx
 
