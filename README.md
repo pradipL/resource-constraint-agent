@@ -158,6 +158,7 @@ GET /download?path=/app/traces/trace_20250607_120000.json
 Only paths inside `/app/tmp` and `/app/traces` are allowed.
 
 Note: If you want to see the full log of executing the agent you can see on the agent container log.
+Before running the container make sure .env file is created on the same level of .env.example and the required variable OPENAI_API_KEY and TAVILY_API_KEY key is mandatory given.
 
 
 ---
@@ -173,6 +174,18 @@ The system uses a **custom ReAct agent built with LangGraph**, providing full co
 - The **Planner** generates an execution plan based on the user's query and the available tools.
 - The **Agent** decides and executes the required actions.
 - The **Reflect** node verifies whether the generated response aligns with the user's intent, triggering replanning if necessary.
+
+## Tools and Usage
+
+For knowledge and execution capabilities, the following tools are integrated:
+
+- **RAG** — Internal knowledge retrieval when external search is insufficient.
+- **Tavily Search** — Real-time web information retrieval.
+- **Docker Sandbox** — Secure code execution and file generation, isolated from the host system.
+
+## Code Pattern
+
+The codebase follows a class-based architecture and applies the **Factory pattern** wherever appropriate. On the LLM layer, this makes it easy to swap providers — switching from Ollama to a paid model requires changing a single config value, since each model may return responses in a different format. Similarly, the sandbox execution layer is abstracted so it can be replaced with Daytona or any other sandbox tool without touching the rest of the codebase.
 
 ## Resource Control
 To control resource usage, the architecture implements an **LLM call budget** by tracking the number of LLM invocations in the agent state. If the predefined limit is reached, the system stops further LLM calls and instead produces a summarized response.
