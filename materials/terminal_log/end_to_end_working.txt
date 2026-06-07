@@ -1,0 +1,97 @@
+
+[graph] Compiled graph structure:
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	planner(planner)
+	agent(agent)
+	tool_call(tool_call)
+	reflect(reflect)
+	__end__([<p>__end__</p>]):::last
+	__start__ --> planner;
+	agent -. &nbsp;False&nbsp; .-> __end__;
+	agent -. &nbsp;True&nbsp; .-> tool_call;
+	planner --> agent;
+	reflect -. &nbsp;False&nbsp; .-> agent;
+	reflect -. &nbsp;True&nbsp; .-> planner;
+	tool_call --> reflect;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc
+
+
+============================================================
+Task      : generate a pdf report regarding the current stock point of nepse and nepalese capital market
+Thread ID : 5b13596d-33e7-4c75-9f18-35fee9e898d9  ← pass to --resume to continue
+Backend   : memory checkpointer
+Tools     : ['web_search', 'rag_search', 'sandbox_code_execution']
+============================================================
+[call_llm] used=0 | prompt_est=255 | headroom=19645 | max_tokens=16384
+[call_llm] OpenAI max_tokens=16384
+
+[planner] LLM call 1/10:
+Use functions.web_search to find current information on the stock point of Nepse and the Nepalese capital market.  
+Use functions.sandbox_code_execution to create a PDF report based on the gathered information.  
+Deliver the final PDF report.
+[call_llm] used=583 | prompt_est=328 | headroom=18989 | max_tokens=16336
+[call_llm] OpenAI max_tokens=16336
+
+[agent] LLM call 2/10 | cost so far: $0.006700/$0.20
+
+[tool_call] → web_search({'query': 'current stock point of Nepse and Nepalese capital market'})
+[tool_call] result (truncated): [1] Live Market - Nepali Paisa
+    URL: https://nepalipaisa.com/live-market
+    Live Market. NEPSE. 2,755.41. -11.37. -0.41 %.
+
+[2] Nepal Equity Market Index, 2003 – 2026 | CEIC Data
+    URL: https://www.ceicdata.com/en/indicator/nepal/equity-market-index
+    Key information about Nepal NEPSE. Nepal
+[tool_call] depth now: 1
+[call_llm] used=1196 | prompt_est=816 | headroom=17888 | max_tokens=16312
+[call_llm] OpenAI max_tokens=16312
+
+[reflect] LLM call 3/10 | Making progress: True
+[reflect] PROGRESS: YES  
+REASON: The agent successfully obtained current information about the stock point of Nepse, which is a crucial step toward compiling the report on the Nepalese capital market.
+[call_llm] used=1980 | prompt_est=713 | headroom=17207 | max_tokens=16274
+[call_llm] OpenAI max_tokens=16274
+
+[agent] LLM call 4/10 | cost so far: $0.020825/$0.20
+
+[tool_call] → sandbox_code_execution({'code': "from fpdf import FPDF\n\n# Create a PDF document\npdf = FPDF()\npdf.add_page()\n\n# Title\npdf.set_font('Arial', 'B', 16)\npdf.cell(0, 10, 'Current Stock Point of Nepse and Nepalese Capital Market', 0, 1, 'C')\n\n# Adding content\npdf.set_font('Arial', '', 12)\n\ncontent = [\n    'The current stock point of the Nepal Stock Exchange (NEPSE) is recorded at 2,755.41 points,',\n    'which reflects a decrease of 11.37 points (0.41%).',\n    '',\n    'Market Summary:',\n    'On the previous week, the NEPSE index closed at 2,782.10 points, up 23.61 points (0.86%).',\n    'The market has shown fluctuations but has remained in a tight range.',\n    '',\n    'For detailed market movements and trends, resources such as Nepali Paisa and Sharesansar provide insights.'\n]\n\nfor line in content:\n    pdf.cell(0, 10, line, 0, 1)\n\n# Save the PDF to a temporary path\npdf.output('/tmp/sandbox_output')\n"})
+Downloaded file from sandbox to: /Users/pradiplamichhane/Personal/jobins/resource-agent/tmp/sandbox_output_1780818916.pdf
+local path is /Users/pradiplamichhane/Personal/jobins/resource-agent/tmp/sandbox_output_1780818916.pdf
+[tool_call] result (truncated): File saved to: /Users/pradiplamichhane/Personal/jobins/resource-agent/tmp/sandbox_output_1780818916.pdf
+[tool_call] depth now: 2
+[call_llm] used=3343 | prompt_est=1075 | headroom=15482 | max_tokens=15482
+[call_llm] OpenAI max_tokens=15482
+
+[reflect] LLM call 5/10 | Making progress: True
+[reflect] PROGRESS: YES  
+REASON: The agent successfully created a PDF report containing current stock information on the Nepal Stock Exchange (NEPSE), indicating progress toward completing the task.
+[call_llm] used=4450 | prompt_est=814 | headroom=14636 | max_tokens=14636
+[call_llm] OpenAI max_tokens=14636
+
+[agent] LLM call 6/10 | cost so far: $0.035030/$0.20
+
+============================================================
+FINAL ANSWER:
+The PDF report on the current stock point of NEPSE and the Nepalese capital market has been successfully created. You can download it using the following link:
+
+[Download the PDF report](sandbox:/Users/pradiplamichhane/Personal/jobins/resource-agent/tmp/sandbox_output_1780818916.pdf)
+============================================================
+LLM calls made  : 6/10
+Tool rounds     : 2
+
+── Token & Cost Summary ─────────────────────
+  LLM calls         : 6
+  Prompt tokens     : 5,467
+  Completion tokens : 513
+  Total tokens      : 5,980
+  Estimated cost    : $0.035030
+─────────────────────────────────────────────
+Trace saved → /Users/pradiplamichhane/Personal/jobins/resource-agent/traces/trace_20260607_134019.json
