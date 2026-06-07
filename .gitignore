@@ -35,6 +35,9 @@ htmlcov/
 # OS
 .DS_Store
 
+# Claude
+CLAUDE.md
+
 # Project runtime artifacts
 traces/
 checkpoints/
