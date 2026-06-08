@@ -185,7 +185,7 @@ For knowledge and execution capabilities, the following tools are integrated:
 
 ## Code Pattern
 
-The codebase follows a class-based architecture and applies the **Factory pattern** wherever appropriate. On the LLM layer, this makes it easy to swap providers — switching from Ollama to a paid model requires changing a single config value, since each model may return responses in a different format. Similarly, the sandbox execution layer is abstracted so it can be replaced with Daytona or any other sandbox tool without touching the rest of the codebase.
+The codebase follows a class-based architecture and applies the **Factory + Strategy** pattern on the LLM layer, where the provider switch is controlled by `.env`. This makes it easy to swap providers — switching from Ollama to a paid model requires changing a single `.env` value, even though each model may return responses in a different format. Similarly, the sandbox execution layer is abstracted so it can be replaced with Daytona or any other sandbox provider without touching the rest of the codebase.
 
 ## Resource Control
 To control resource usage, the architecture implements an **LLM call budget** by tracking the number of LLM invocations in the agent state. If the predefined limit is reached, the system stops further LLM calls and instead produces a summarized response.
