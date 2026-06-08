@@ -36,3 +36,11 @@ Running untrusted code directly on the host is a security risk — malicious cod
 This ensures more reliable execution, better adaptability to unexpected failures, and prevents the agent from getting stuck in an unproductive loop.
 
 ![Planning, ReAct, and Reflection architecture](materials/architecture/langgraph_architecture.png)
+
+## 4. RAG over Simple Retrieval Tools
+
+**Decision:** Use RAG (Retrieval-Augmented Generation) instead of simpler retrieval tools.
+
+**Reasoning:** RAG provides richer context to the LLM compared to basic keyword or document lookup tools. It reduces hallucination by grounding responses in retrieved content rather than relying solely on the model's parametric knowledge. It also enables querying an internal knowledge base, which is a key capability for domain-specific tasks.
+
+As a practical example relevant to Jobins as a recruiting company — RAG could be used to store candidate CVs and semantically query them to find the best match for a given role, going far beyond what simple filtering or keyword search can achieve.
