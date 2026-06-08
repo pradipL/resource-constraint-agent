@@ -37,9 +37,9 @@ This ensures more reliable execution, better adaptability to unexpected failures
 
 ![Planning, ReAct, and Reflection architecture](materials/architecture/langgraph_architecture.png)
 
-## 4. RAG over Simple Retrieval Tools
+## 4. RAG over other Tools
 
-**Decision:** Use RAG (Retrieval-Augmented Generation) instead of simpler retrieval tools.
+**Decision:** Use RAG (Retrieval-Augmented Generation) instead of other tools.
 
 **Reasoning:** RAG provides richer context to the LLM compared to basic keyword or document lookup tools. It reduces hallucination by grounding responses in retrieved content rather than relying solely on the model's parametric knowledge. It also enables querying an internal knowledge base, which is a key capability for domain-specific tasks.
 
